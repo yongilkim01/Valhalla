@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
+#include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
-
+class UInputMappingContext;
+class UInputAction;
 /**
 * APlayerCharacter
 * 플레이어 캐릭터를 정의하는 클래스. ABaseCharacter를 상속.
@@ -21,13 +23,21 @@ class VALHALLA_API APlayerCharacter : public ABaseCharacter
 public:
 	APlayerCharacter();
 
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 protected:
 	virtual void BeginPlay() override;
+	void MoveForward(float Value);
+
+	/**
+	* 플레이어가 이동할 때 호출되는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
+	* @param Value: 이동 방향 및 크기를 나타내는 입력 값.
+	*/
+	void Move(const FInputActionValue& Value);
 
 private: // Private variables	
 	/**
-	* SpringArm:
-	* 플레이어 캐릭터에 연결된 스프링 암 컴포넌트. 카메라와 캐릭터 간의 거리를 제어하는 역할을 함.
+	* 플레이어 캐릭터에 연결된 스프링 암 컴포넌트. 카메라와 캐릭터 간의 거리를 제어하는 역할.
 	* 카메라의 회전이나 거리 조정과 같은 다양한 카메라 관련 동작을 지원.
 	* Blueprint에서 읽기 전용(VisibleAnywhere)으로 설정되어 있으며, Private 접근 수준에서만 수정 가능.
 	*/
@@ -35,10 +45,23 @@ private: // Private variables
 	USpringArmComponent* SpringArm;
 
 	/**
-	* PlayerCamera:
 	* 플레이어의 시점을 제어하는 카메라 컴포넌트. 스프링 암에 연결되어 있으며, 플레이어의 시점을 따라다니는 카메라.
 	* Blueprint에서 읽기 전용(VisibleAnywhere)으로 설정되어 있으며, Private 접근 수준에서만 수정 가능.
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* PlayerCamera;
+	UCameraComponent* Camera;
+
+protected: // Protected variables
+	/**
+	* 입력 맵핑을 관리하는 UInputMappingContext 객체. 입력 액션과 컨텍스트를 바인딩하여 플레이어가 입력을 통해 캐릭터를 제어.
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputMappingContext* MappingContext;
+	/**
+	* 플레이어 캐릭터의 이동을 처리하는 입력 액션. 이동 관련 입력(예: 방향키, 스틱 움직임 등)을 처리하고 이동 함수와 연결.
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* MoveAction;
 };

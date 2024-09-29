@@ -1,10 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Characters/PlayerCharacter.h"
+
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 
 #include "ValhallaDebugHelper.h"
 
@@ -31,9 +35,9 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->bUsePawnControlRotation = true; // 컨트롤러 회전을 스프링 암에 반영
 
 	// 카메라 컴포넌트 생성 및 스프링 암에 부착
-	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
-	PlayerCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // 스프링 암의 소켓에 카메라 부착
-	PlayerCamera->bUsePawnControlRotation = false; // 카메라는 자체 회전을 사용하지 않음
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName); // 스프링 암의 소켓에 카메라 부착
+	Camera->bUsePawnControlRotation = false; // 카메라는 자체 회전을 사용하지 않음
 
 	// 캐릭터 이동 관련 설정
 	GetCharacterMovement()->bOrientRotationToMovement = true; // 캐릭터가 이동 방향에 따라 회전하도록 설정
@@ -45,6 +49,59 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Debug::Print(TEXT("Working"));
+
+	// APlayerController 타입의 컨트롤러를 캐스팅하여 플레이어의 컨트롤러인지 확인
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		// UEnhancedInputLocalPlayerSubsystem을 가져옴, 입력 서브시스템에 액세스
+		if (UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			// 입력 맵핑 컨텍스트를 서브시스템에 추가, 우선순위 0으로 설정
+			SubSystem->AddMappingContext(MappingContext, 0);
+		}
+	}
+}
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void APlayerCharacter::MoveForward(float Value)
+{
+	// 컨트롤러가 유효하고, Value가 0이 아닌 경우에만 처리
+	if (Controller && (Value != 0.f))
+	{
+		// 캐릭터의 전방 벡터(FVector)를 가져옴
+		FVector Forward = GetActorForwardVector();
+		// 입력된 Value 값을 기준으로 전방 방향으로 캐릭터 이동
+		AddMovementInput(Forward, Value);
+	}
+}
+
+void APlayerCharacter::Move(const FInputActionValue& Value)
+{
+	// FInputActionValue로부터 bool 값을 가져옴
+	const bool CurrentValue = Value.Get<bool>();
+	if (CurrentValue)
+	{
+		// 로그 메시지를 출력하여 입력이 트리거되었음을 확인
+		UE_LOG(LogTemp, Warning, TEXT("IA_MOVE triggered"));
+	}
+}
+
+
+void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// UInputComponent가 UEnhancedInputComponent로 캐스팅 가능한지 확인
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		// MoveAction을 입력에 바인딩, Triggered 이벤트가 발생할 때 Move 함수 호출
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+	}
+
+	// 축 입력 방식으로 캐릭터를 전방으로 이동시키는 코드를 주석 처리
+	// PlayerInputComponent->BindAxis(FName("MoveForward"), this, &APlayerCharacter::MoveForward);
 }
