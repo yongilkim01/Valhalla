@@ -81,12 +81,43 @@ void APlayerCharacter::MoveForward(float Value)
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	// FInputActionValue로부터 bool 값을 가져옴
-	const bool CurrentValue = Value.Get<bool>();
-	if (CurrentValue)
+	// InputAction(IA_Move)의 값 타입이 Axis2D일 경우 FVector2D로 형변환
+	const FVector2D MovementVector = Value.Get<FVector2D>();
+
+	// 현재 회전값으로 값을 초기화
+	const FRotator MovementRotation(0.f, GetController()->GetControlRotation().Yaw, 0.f);
+
+	// 앞으로 이동을 했을 경우
+	if (MovementVector.Y != 0.f)
 	{
-		// 로그 메시지를 출력하여 입력이 트리거되었음을 확인
-		UE_LOG(LogTemp, Warning, TEXT("IA_MOVE triggered"));
+		// 회전값을 설정
+		const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);
+		
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+	}
+	// 옆으로 이동을 했을 경우
+	if (MovementVector.X != 0.f)
+	{
+		// 회전값을 설정
+		const FVector RightDirection = MovementRotation.RotateVector(FVector::RightVector);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
+}
+
+void APlayerCharacter::Look(const FInputActionValue& Value)
+{
+	// InputAction(IA_Look)의 값 타입이 Axis2D일 경우 FVector2D로 형변환
+	const FVector2D LookVector = Value.Get<FVector2D>();
+
+	// 입력으로 들어온 값, 즉 마우스의 위치 값의 가로 이동값이 0이 아닐 경우
+	if (LookVector.X != 0.f)
+	{
+		AddControllerYawInput(LookVector.X);
+	}
+	// 입력으로 들어온 값, 즉 마우스의 위치 값의 세로 이동값이 0이 아닐 경우
+	if(LookVector.Y != 0.f)
+	{
+		AddControllerPitchInput(LookVector.Y);
 	}
 }
 
@@ -99,7 +130,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// MoveAction을 입력에 바인딩, Triggered 이벤트가 발생할 때 Move 함수 호출
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 	}
 
 	// 축 입력 방식으로 캐릭터를 전방으로 이동시키는 코드를 주석 처리

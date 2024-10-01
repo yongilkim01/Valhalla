@@ -34,6 +34,11 @@ protected:
 	* @param Value: 이동 방향 및 크기를 나타내는 입력 값.
 	*/
 	void Move(const FInputActionValue& Value);
+	/**
+	* 마우스가 움직일 때 호출되는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
+	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
+	*/
+	void Look(const FInputActionValue& Value);
 
 private: // Private variables	
 	/**
@@ -59,9 +64,15 @@ protected: // Protected variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputMappingContext* MappingContext;
 	/**
-	* 플레이어 캐릭터의 이동을 처리하는 입력 액션. 이동 관련 입력(예: 방향키, 스틱 움직임 등)을 처리하고 이동 함수와 연결.
+	* 플레이어 캐릭터의 이동을 처리하는 입력 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* MoveAction;
+	UInputAction* MoveInputAction;
+	/**
+	* 플레이어 카메라의 회전을 마우스의 이동ㅇ 따라서 처리하는 입력 액션.
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* LookInputAction;
 };
