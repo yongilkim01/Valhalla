@@ -3,6 +3,7 @@
 
 #include "Items/Weapons/PlayerWeapon.h"
 #include "Components/SphereComponent.h"
+#include "Characters/PlayerCharacter.h"
 
 #include "ValhallaDebugHelper.h"
 
@@ -25,6 +26,14 @@ void APlayerWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AA
 {
 	const FString OtherActorName = OtherActor->GetName();
 	Debug::Print(OtherActorName, FColor::Red);
+
+	SetOwningCharacter(Cast<APlayerCharacter>(OtherActor));
+
+	if (GetOwningCharacter())
+	{
+		FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
+		ItemMesh->AttachToComponent(GetOwningCharacter()->GetMesh(), TransformRules, FName("BackWeaponSocket"));
+	}
 }
 
 void APlayerWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
