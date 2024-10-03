@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class APlayerWeapon;
 /**
 * APlayerCharacter
 * 플레이어 캐릭터를 정의하는 클래스. ABaseCharacter를 상속.
@@ -25,6 +26,14 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/**
+	* 캐릭터에게 무기를 장착시키는 메소드
+	*
+	* @param Weapon: 캐릭터에게 장착시키려고 하는 무기 객체 포인터.
+	*/
+	virtual void EquipWeapon(ABaseWeapon* Weapon) override;
+
 protected:
 	virtual void BeginPlay() override;
 	void MoveForward(float Value);

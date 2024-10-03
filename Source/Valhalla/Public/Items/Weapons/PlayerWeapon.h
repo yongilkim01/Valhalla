@@ -39,12 +39,11 @@ protected:
 	 * @param OtherActor: 구체와 겹침이 끝난 다른 액터.
 	 * @param OtherComp: 구체와 겹침이 끝난 다른 액터의 컴포넌트.
 	 * @param OtherBodyIndex: 겹친 바디의 인덱스.
-	 */
+	 */	
 	UFUNCTION()
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 private:
 	// 아이템 원형 콜리전, 플레이어가 범위 안에 들어왔는지를 판단.
 	UPROPERTY(VisibleAnywhere)
-	USphereComponent* SphereCollision;
-	
+	USphereComponent* SphereCollision = nullptr;
 };

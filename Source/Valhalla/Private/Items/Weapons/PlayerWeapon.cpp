@@ -31,6 +31,7 @@ void APlayerWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 	if (GetOwningCharacter())
 	{
+		GetOwningCharacter()->EquipWeapon(this);
 		FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
 		ItemMesh->AttachToComponent(GetOwningCharacter()->GetMesh(), TransformRules, FName("BackWeaponSocket"));
 	}

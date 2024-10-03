@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Characters/PlayerCharacter.h"
+#include "Items/Weapons/PlayerWeapon.h"
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -119,6 +120,11 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	{
 		AddControllerPitchInput(LookVector.Y);
 	}
+}
+
+void APlayerCharacter::EquipWeapon(ABaseWeapon* Weapon)
+{
+	SetCharacterWeapon(Weapon);
 }
 
 
