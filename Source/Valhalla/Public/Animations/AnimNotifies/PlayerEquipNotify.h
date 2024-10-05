@@ -9,9 +9,16 @@
 /**
  * 
  */
+
+DECLARE_MULTICAST_DELEGATE(FOnNotifiedSignature)
+
 UCLASS()
 class VALHALLA_API UPlayerEquipNotify : public UAnimNotify
 {
 	GENERATED_BODY()
+
+public:
+	FOnNotifiedSignature OnNotified;
+	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 	
 };

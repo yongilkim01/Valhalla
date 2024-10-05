@@ -23,17 +23,15 @@ class VALHALLA_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-public:
+public: // Public methodes
 	APlayerCharacter();
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-protected:
+protected: // Protected methodes
 	virtual void BeginPlay() override;
-
 	void MoveForward(float Value);
-
 	/**
 	* 플레이어가 이동할 때 호출되는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
 	* @param Value: 이동 방향 및 크기를 나타내는 입력 값.
@@ -54,6 +52,17 @@ protected:
 	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
 	*/
 	void Equip(const FInputActionValue& Value);
+
+private: // Private methodes
+	/**
+	* 애니메이션 관련 설정 초기화 메소드.
+	* 1. AnimNotify 바인드.
+	*/
+	void InitAnimation();
+	/** EquipMontage AnimNotify 초기화 메소드. */
+	void InitEquipMontageNotify();
+	/** EquipMontage 재생 중에 무기를 플레이어의 손에 부착하는 메소드. */
+	void AttachWeaponToRightHand();
 
 private: // Private variables	
 	/**
@@ -96,14 +105,12 @@ protected: // Protected variables
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* InteractionInputAction = nullptr;
-
 	/**
 	* 플레이어가 무기를 장착하는 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* EquipInputAction = nullptr;
-
 	/**
 	* 플레이어의 무기 장착 애니메이션 몽타주.
 	* 디폴트 값만 편집 가능(EditDefaultsOnly) 속성으로 설정.

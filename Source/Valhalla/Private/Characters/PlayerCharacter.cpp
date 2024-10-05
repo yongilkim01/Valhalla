@@ -2,6 +2,7 @@
 
 #include "Characters/PlayerCharacter.h"
 #include "Items/Weapons/PlayerWeapon.h"
+#include "Animations/AnimNotifies/PlayerEquipNotify.h"
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -61,7 +62,17 @@ void APlayerCharacter::BeginPlay()
 			SubSystem->AddMappingContext(MappingContext, 0);
 		}
 	}
+	
+	// 애니메이션 관련 설정 초기화.
+	InitAnimation();
 }
+
+void APlayerCharacter::InitAnimation()
+{
+	// Equip Montage 초기화.
+	InitEquipMontageNotify();
+}
+
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
@@ -139,10 +150,37 @@ void APlayerCharacter::Equip(const FInputActionValue& Value)
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && EquipMontage)
 	{
-		Debug::Print(TEXT("장착 눌림"));
 		AnimInstance->Montage_Play(EquipMontage);
 	}
 }
+
+void APlayerCharacter::InitEquipMontageNotify()
+{
+	// EquipMontage이 유효한지 검사.
+	if (EquipMontage)
+	{
+		// EquipMontage에 있는 Notify들을 가져옴.
+		const TArray<FAnimNotifyEvent> EventNotifies = EquipMontage->Notifies;
+
+		// Notify의 수 만큼 반복.
+		for (FAnimNotifyEvent EventNotify : EventNotifies)
+		{
+			// PlayerEquipNotify로 캐스팅이 가능한지 검사.
+			if (UPlayerEquipNotify* EquipNotify = Cast<UPlayerEquipNotify>(EventNotify.Notify))
+			{
+				// 캐스팅이 완료됬다면 해당 Notify에서 실행할 메소드를 바인딩.
+				EquipNotify->OnNotified.AddUObject(this, &APlayerCharacter::AttachWeaponToRightHand);
+			}
+		}
+
+	}
+}
+
+void APlayerCharacter::AttachWeaponToRightHand()
+{
+	Debug::Print(TEXT("내 손안에 무기 생성"));
+}
+
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
