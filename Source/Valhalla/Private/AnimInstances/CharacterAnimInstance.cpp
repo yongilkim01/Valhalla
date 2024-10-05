@@ -28,4 +28,7 @@ void UCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 
 	// 캐릭터 무브먼트의 가속도 값이 0 이상일 경우 움직이고 있다고 판단.
 	IsAcceleration =  OwningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
+
+	// 현재 캐릭터 애니메이션의 캐릭터 상태 업데이트
+	CharacterState = OwningCharacter->GetCharacterState();
 }

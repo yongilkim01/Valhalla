@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "CharacterTypes.h"
 #include "BaseCharacter.generated.h"
 
 class ABaseWeapon;
@@ -43,6 +44,9 @@ public: // 게터 세터
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem() { return OverlappingItem; }
 
+	FORCEINLINE void SetCharacterState(ECharacterState State) { CharacterState = State; }
+	FORCEINLINE ECharacterState GetCharacterState() { return CharacterState; }
+
 private: // Private 멤버 변수
 	/**
 	* 플레이어 범위 안에 들어온 아이템 객체
@@ -54,4 +58,7 @@ private: // Private 멤버 변수
 	*/
 	UPROPERTY(VisibleAnywhere, Category = "Item|Weapon")
 	ABaseWeapon* CharacterWeapon = nullptr;
+
+	/** 현재 플레이어 캐릭터의 상태를 담고 있는 변수. */
+	ECharacterState CharacterState = ECharacterState::ECS_Unequip;
 };

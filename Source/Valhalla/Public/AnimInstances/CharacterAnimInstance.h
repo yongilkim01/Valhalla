@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AnimInstances/BaseAnimInstance.h"
+#include "Characters/CharacterTypes.h"
 #include "CharacterAnimInstance.generated.h"
 
 /**
@@ -45,5 +46,7 @@ protected:
 	// 애니메이션 상태를 변경시키기 위한 캐릭터의 움직임 유무.
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool IsAcceleration = false;
+
+	ECharacterState CharacterState;
 	
 };

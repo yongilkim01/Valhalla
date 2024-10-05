@@ -124,9 +124,13 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::Interaction(const FInputActionValue& Value)
 {
+	// 현재 범위 안에 들어온 아이템이 있다면
 	if (GetOverlappingItem())
 	{
+		// 캐릭터에게 아이템을 부착
 		GetOverlappingItem()->Equip(GetMesh(), FName("BackWeaponSocket"));
+		// 캐릭터의 상태를 장착 상태로 변경
+		SetCharacterState(ECharacterState::ECS_Equip);
 	}
 }
 
