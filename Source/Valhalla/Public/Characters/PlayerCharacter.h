@@ -12,6 +12,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class APlayerWeapon;
+class UAnimMontage;
 
 /**
 * APlayerCharacter
@@ -95,4 +96,18 @@ protected: // Protected variables
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* InteractionInputAction = nullptr;
+
+	/**
+	* 플레이어가 무기를 장착하는 액션.
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* EquipInputAction = nullptr;
+
+	/**
+	* 플레이어의 무기 장착 애니메이션 몽타주.
+	* 디폴트 값만 편집 가능(EditDefaultsOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* EquipMontage = nullptr;
 };

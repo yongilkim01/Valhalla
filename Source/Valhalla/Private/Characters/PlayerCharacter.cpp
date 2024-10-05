@@ -136,6 +136,12 @@ void APlayerCharacter::Interaction(const FInputActionValue& Value)
 
 void APlayerCharacter::Equip(const FInputActionValue& Value)
 {
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && EquipMontage)
+	{
+		Debug::Print(TEXT("장착 눌림"));
+		AnimInstance->Montage_Play(EquipMontage);
+	}
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -149,6 +155,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		EnhancedInputComponent->BindAction(InteractionInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interaction);
+		EnhancedInputComponent->BindAction(EquipInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Equip);
 	}
 
 	// 축 입력 방식으로 캐릭터를 전방으로 이동시키는 코드를 주석 처리
