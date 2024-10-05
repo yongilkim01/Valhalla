@@ -122,6 +122,14 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void APlayerCharacter::Interaction(const FInputActionValue& Value)
+{
+	if (GetOverlappingItem())
+	{
+		GetOverlappingItem()->Equip(GetMesh(), FName("BackWeaponSocket"));
+	}
+}
+
 void APlayerCharacter::EquipWeapon(ABaseWeapon* Weapon)
 {
 	SetCharacterWeapon(Weapon);
@@ -138,6 +146,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		// MoveAction을 입력에 바인딩, Triggered 이벤트가 발생할 때 Move 함수 호출
 		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
+		EnhancedInputComponent->BindAction(InteractionInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interaction);
 	}
 
 	// 축 입력 방식으로 캐릭터를 전방으로 이동시키는 코드를 주석 처리

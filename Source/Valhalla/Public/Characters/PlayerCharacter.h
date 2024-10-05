@@ -12,6 +12,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class APlayerWeapon;
+
 /**
 * APlayerCharacter
 * 플레이어 캐릭터를 정의하는 클래스. ABaseCharacter를 상속.
@@ -48,6 +49,11 @@ protected:
 	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
 	*/
 	void Look(const FInputActionValue& Value);
+	/**
+	* 아이템을
+	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
+	*/
+	void Interaction(const FInputActionValue& Value);
 
 private: // Private variables	
 	/**
@@ -56,14 +62,14 @@ private: // Private variables
 	* Blueprint에서 읽기 전용(VisibleAnywhere)으로 설정되어 있으며, Private 접근 수준에서만 수정 가능.
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* SpringArm;
+	USpringArmComponent* SpringArm = nullptr;
 
 	/**
 	* 플레이어의 시점을 제어하는 카메라 컴포넌트. 스프링 암에 연결되어 있으며, 플레이어의 시점을 따라다니는 카메라.
 	* Blueprint에서 읽기 전용(VisibleAnywhere)으로 설정되어 있으며, Private 접근 수준에서만 수정 가능.
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* Camera;
+	UCameraComponent* Camera = nullptr;
 
 protected: // Protected variables
 	/**
@@ -71,17 +77,23 @@ protected: // Protected variables
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputMappingContext* MappingContext;
+	UInputMappingContext* MappingContext = nullptr;
 	/**
 	* 플레이어 캐릭터의 이동을 처리하는 입력 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* MoveInputAction;
+	UInputAction* MoveInputAction = nullptr;
 	/**
-	* 플레이어 카메라의 회전을 마우스의 이동ㅇ 따라서 처리하는 입력 액션.
+	* 플레이어 카메라의 회전을 마우스의 이동을 따라서 처리하는 입력 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UInputAction* LookInputAction;
+	UInputAction* LookInputAction = nullptr;
+	/**
+	* 플레이어가 상호작용하는 액션.
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UInputAction* InteractionInputAction = nullptr;
 };

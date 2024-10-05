@@ -19,6 +19,7 @@ class VALHALLA_API AItem : public AActor
 public:	
 	AItem();
 
+	virtual void Equip(USceneComponent* EquipTargetMesh, FName AttachSocketName);
 protected:
 	//virtual void BeginPlay() override;
 	///**

@@ -15,9 +15,12 @@ class VALHALLA_API ABaseWeapon : public AItem
 {
 	GENERATED_BODY()
 
+public:
+	virtual void Equip(USceneComponent* EquipTargetMesh, FName AttachSocketName) override;
+
 public: // 게터 세터
-	ABaseCharacter* GetOwningCharacter();
-	void SetOwningCharacter(ABaseCharacter* BaseCharacter);
+	FORCEINLINE ABaseCharacter* GetOwningCharacter() { return OwningCharacter; }
+	FORCEINLINE void SetOwningCharacter(ABaseCharacter* BaseCharacter) { OwningCharacter = BaseCharacter; }
 	
 private: // Private 변수
 	// 현재 이 무기를 소유하고 있는 캐릭터 객체.

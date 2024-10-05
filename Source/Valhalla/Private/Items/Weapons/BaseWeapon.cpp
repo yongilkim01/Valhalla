@@ -4,13 +4,8 @@
 #include "Items/Weapons/BaseWeapon.h"
 #include "Characters/BaseCharacter.h"
 
-ABaseCharacter* ABaseWeapon::GetOwningCharacter()
+void ABaseWeapon::Equip(USceneComponent* EquipTargetMesh, FName AttachSocketName)
 {
-    if (OwningCharacter) return OwningCharacter;
-    else return nullptr;
-}
-
-void ABaseWeapon::SetOwningCharacter(ABaseCharacter* BaseCharacter)
-{
-    OwningCharacter = BaseCharacter;
+	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
+	ItemMesh->AttachToComponent(EquipTargetMesh, TransformRules, AttachSocketName);
 }

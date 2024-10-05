@@ -28,12 +28,10 @@ void APlayerWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	Debug::Print(OtherActorName, FColor::Red);
 
 	SetOwningCharacter(Cast<APlayerCharacter>(OtherActor));
-
+	 
 	if (GetOwningCharacter())
 	{
-		GetOwningCharacter()->EquipWeapon(this);
-		FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget, true);
-		ItemMesh->AttachToComponent(GetOwningCharacter()->GetMesh(), TransformRules, FName("BackWeaponSocket"));
+		GetOwningCharacter()->SetOverlappingItem(this);
 	}
 }
 
@@ -41,4 +39,11 @@ void APlayerWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	const FString OtherActorName = FString("Ending Overlap with: ") + OtherActor->GetName();
 	Debug::Print(OtherActorName, FColor::Green);
+
+	SetOwningCharacter(Cast<APlayerCharacter>(OtherActor));
+
+	if (GetOwningCharacter())
+	{
+		GetOwningCharacter()->SetOverlappingItem(nullptr);
+	}
 }
