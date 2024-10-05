@@ -10,10 +10,6 @@ ABaseCharacter::ABaseCharacter()
 
 }
 
-void ABaseCharacter::AttachActorToCharacter(AItem* AttachItem)
-{
-}
-
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -30,9 +26,4 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
-
-void ABaseCharacter::EquipWeapon(ABaseWeapon* Weapon)
-{
-	
 }

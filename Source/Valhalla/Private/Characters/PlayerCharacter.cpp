@@ -134,11 +134,9 @@ void APlayerCharacter::Interaction(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::EquipWeapon(ABaseWeapon* Weapon)
+void APlayerCharacter::Equip(const FInputActionValue& Value)
 {
-	SetCharacterWeapon(Weapon);
 }
-
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

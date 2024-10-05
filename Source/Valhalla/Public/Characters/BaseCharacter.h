@@ -20,20 +20,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/**
-	* 캐릭터에게 무기를 할당시키는 메소드.
-	*
-	* @param Weapon: 캐릭터에게 장착시키려고 하는 무기 객체 포인터.
-	*/
-	virtual void EquipWeapon(ABaseWeapon* Weapon);
-
-	/**
-	* 캐릭터 액터에게 또 다른 액터를 부착시키는 메소드.
-	* 
-	* @param AttachItem: 캐릭터 액터에게 부착시키려고 하는 액터 객체.
-	*/
-	void AttachActorToCharacter(AItem* AttachItem);
-
 protected:
 	virtual void BeginPlay() override;
 

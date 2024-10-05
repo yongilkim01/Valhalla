@@ -28,15 +28,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/**
-	* 캐릭터에게 무기를 장착시키는 메소드
-	*
-	* @param Weapon: 캐릭터에게 장착시키려고 하는 무기 객체 포인터.
-	*/
-	virtual void EquipWeapon(ABaseWeapon* Weapon) override;
-
 protected:
 	virtual void BeginPlay() override;
+
 	void MoveForward(float Value);
 
 	/**
@@ -50,10 +44,15 @@ protected:
 	*/
 	void Look(const FInputActionValue& Value);
 	/**
-	* 아이템을
+	* 상호작용 하는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
 	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
 	*/
 	void Interaction(const FInputActionValue& Value);
+	/**
+	* 무기를 장착하는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
+	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
+	*/
+	void Equip(const FInputActionValue& Value);
 
 private: // Private variables	
 	/**
