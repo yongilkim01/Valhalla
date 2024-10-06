@@ -24,8 +24,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public: // 게터 세터
-	FORCEINLINE void SetCharacterWeapon(ABaseWeapon* Weapon) { CharacterWeapon = Weapon; }
-	FORCEINLINE ABaseWeapon* GetChracterWeapon() { return CharacterWeapon; }
+	FORCEINLINE void SetCharacterWeapon(AItem* Weapon) { CharacterWeapon = Weapon; }
+	FORCEINLINE AItem* GetCharacterWeapon() { return CharacterWeapon; }
 
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem() { return OverlappingItem; }
@@ -37,13 +37,13 @@ private: // Private 멤버 변수
 	/**
 	* 플레이어 범위 안에 들어온 아이템 객체
 	*/
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UPROPERTY(VisibleAnywhere, Category = "CharacterData|Item")
 	AItem* OverlappingItem = nullptr;
 	/**
 	* 캐릭터가 가지고 있는 무기 객체.
 	*/
-	UPROPERTY(VisibleAnywhere, Category = "Item|Weapon")
-	ABaseWeapon* CharacterWeapon = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "CharacterData|Item")
+	AItem* CharacterWeapon = nullptr;
 
 	/** 현재 플레이어 캐릭터의 상태를 담고 있는 변수. */
 	ECharacterState CharacterState = ECharacterState::ECS_Unequip;

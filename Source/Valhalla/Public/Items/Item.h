@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ItemTypes.h"
 #include "Item.generated.h"
 
 class UBoxComponent;
@@ -49,13 +50,13 @@ public: // 게터 세터
 	FORCEINLINE UBoxComponent* GetItemCollisionBox() const { return ItemCollisionBox; }
 
 protected: // Protected 변수
-	// 아이템 메쉬 멤버 변수
+	/** 아이템 메쉬 멤버 변수 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WeaponComponent")
 	UStaticMeshComponent* ItemMesh;
-	// 아이템 콜리전 멤버 변수
+	/** 아이템 콜리전 멤버 변수 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WeaponComponent")
 	UBoxComponent* ItemCollisionBox;
-	// 아이템 원형 콜리전, 플레이어가 범위 안에 들어왔는지를 판단.
-	//UPROPERTY(VisibleAnywhere)
-	//USphereComponent* SphereCollision;
+	/** 아이템 타입 변수 */
+	UPROPERTY(EditDefaultsOnly, Category = "ItemData")
+	EItemType ItemType = EItemType::EIT_None;
 };

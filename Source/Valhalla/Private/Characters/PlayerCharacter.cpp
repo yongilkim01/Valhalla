@@ -142,6 +142,7 @@ void APlayerCharacter::Interaction(const FInputActionValue& Value)
 		GetOverlappingItem()->Equip(GetMesh(), FName("BackWeaponSocket"));
 		// 캐릭터의 상태를 장착 상태로 변경
 		SetCharacterState(ECharacterState::ECS_Equip);
+		SetCharacterWeapon(GetOverlappingItem());
 	}
 }
 
@@ -179,6 +180,12 @@ void APlayerCharacter::InitEquipMontageNotify()
 void APlayerCharacter::AttachWeaponToRightHand()
 {
 	Debug::Print(TEXT("내 손안에 무기 생성"));
+	// 캐릭터에게 아이템을 부착
+	if (GetOverlappingItem())
+	{
+		GetOverlappingItem()->Equip(GetMesh(), FName("RightHandWeaponSocket"));
+		//GetMesh()->LinkAnimClassLayers(GetOverlappingItem());
+	}
 }
 
 
