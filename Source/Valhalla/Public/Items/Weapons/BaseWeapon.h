@@ -16,7 +16,7 @@ class VALHALLA_API ABaseWeapon : public AItem
 	GENERATED_BODY()
 
 public:
-	virtual void Equip(USceneComponent* EquipTargetMesh, FName AttachSocketName) override;
+	virtual void AttachItem(USceneComponent* EquipTargetMesh, FName AttachSocketName) override;
 
 public: // 게터 세터
 	FORCEINLINE ABaseCharacter* GetOwningCharacter() { return OwningCharacter; }

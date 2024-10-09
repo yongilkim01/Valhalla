@@ -23,10 +23,6 @@ AItem::AItem()
 	//SphereCollision->SetupAttachment(GetRootComponent());
 }
 
-void AItem::Equip(USceneComponent* EquipTargetMesh, FName AttachSocketName)
-{
-}
-
 //void AItem::BeginPlay()
 //{
 //	Super::BeginPlay();

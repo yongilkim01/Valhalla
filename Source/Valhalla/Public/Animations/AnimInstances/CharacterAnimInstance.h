@@ -47,6 +47,8 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "AnimData|LocomotionData")
 	bool IsAcceleration = false;
 
+	// 애니메이션 상태를 변경시키기 위한 캐릭터의 현재 상태.
+	UPROPERTY(BlueprintReadOnly, Category = "AnimData|Character State")
 	ECharacterState CharacterState;
 	
 };
