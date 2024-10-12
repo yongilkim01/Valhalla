@@ -3,6 +3,7 @@
 #include "Characters/PlayerCharacter.h"
 #include "Items/Weapons/PlayerWeapon.h"
 #include "Animations/AnimNotifies/PlayerEquipNotify.h"
+#include "Animations/AnimNotifies/PlayerUnequipNotify.h"
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -71,6 +72,7 @@ void APlayerCharacter::InitAnimation()
 {
 	// Equip Montage 초기화.
 	InitEquipMontageNotify();
+	InitUnequipMontageNotify();
 }
 
 
@@ -146,10 +148,21 @@ void APlayerCharacter::Interaction(const FInputActionValue& Value)
 
 void APlayerCharacter::Equip(const FInputActionValue& Value)
 {
+	// 장착 몽타주 또는 장착 해제 몽타주가 nullptr일 경우 리턴.
+	if (EquipMontage == nullptr && UnequipMontage == nullptr) return;
+
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && EquipMontage)
+
+	if (AnimInstance)
 	{
-		AnimInstance->Montage_Play(EquipMontage);
+		if (GetCharacterState() == ECharacterState::ECS_Unequip)
+		{
+			AnimInstance->Montage_Play(EquipMontage);
+		}
+		else if (GetCharacterState() == ECharacterState::ECS_Equip)
+		{
+			AnimInstance->Montage_Play(UnequipMontage);
+		}
 	}
 }
 
@@ -175,18 +188,45 @@ void APlayerCharacter::InitEquipMontageNotify()
 	}
 }
 
+void APlayerCharacter::InitUnequipMontageNotify()
+{
+	// UnequipMontage이 유효한지 검사.
+	if (UnequipMontage)
+	{
+		// UnequipMontage에 있는 Notify들을 가져옴.
+		const TArray<FAnimNotifyEvent> EventNotifies = UnequipMontage->Notifies;
+
+		// Notify의 수 만큼 반복.
+		for (FAnimNotifyEvent EventNotify : EventNotifies)
+		{
+			// PlayerEquipNotify로 캐스팅이 가능한지 검사.
+			if (UPlayerUnequipNotify* UnequipNotify = Cast<UPlayerUnequipNotify>(EventNotify.Notify))
+			{
+				// 캐스팅이 완료됬다면 해당 Notify에서 실행할 메소드를 바인딩.
+				UnequipNotify->OnNotified.AddUObject(this, &APlayerCharacter::AttachWeaponToBack);
+			}
+		}
+
+	}
+}
+
 void APlayerCharacter::AttachWeaponToRightHand()
 {
-	Debug::Print(TEXT("내 손안에 무기 생성"));
+	Debug::Print(TEXT("오른쪽 손에 무기 부착"));
 	// 캐릭터에게 아이템을 부착
-	if (GetOverlappingItem() && GetCharacterState() == ECharacterState::ECS_Unequip)
+	if (GetOverlappingItem())
 	{
 		// 캐릭터의 상태를 장착 상태로 변경
 		SetCharacterState(ECharacterState::ECS_Equip);
 		GetOverlappingItem()->AttachItem(GetMesh(), FName("RightHandWeaponSocket"));
 		//GetMesh()->LinkAnimClassLayers(GetOverlappingItem());
 	}
-	else if (GetOverlappingItem() && GetCharacterState() == ECharacterState::ECS_Equip)
+}
+
+void APlayerCharacter::AttachWeaponToBack()
+{
+	Debug::Print(TEXT("등에 무기 부착"));
+	if (GetOverlappingItem())
 	{
 		SetCharacterState(ECharacterState::ECS_Unequip);
 		GetOverlappingItem()->AttachItem(GetMesh(), FName("BackWeaponSocket"));
