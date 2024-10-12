@@ -4,6 +4,7 @@
 #include "Animations/AnimInstances/CharacterAnimInstance.h"
 #include "Characters/BaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // 애니메이션 인스턴스 초기화
 void UCharacterAnimInstance::NativeInitializeAnimation()
@@ -24,7 +25,7 @@ void UCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	if (!OwningCharacter || !OwningMovementComponent) return;
 
 	// 소유 캐릭터 객체의 물리 속도를 GroundSpeed의 할당.
-	GroundSpeed = OwningCharacter->GetVelocity().Size2D();
+	GroundSpeed = UKismetMathLibrary::VSizeXY(OwningMovementComponent->Velocity);
 
 	// 캐릭터 무브먼트의 가속도 값이 0 이상일 경우 움직이고 있다고 판단.
 	IsAcceleration = OwningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
