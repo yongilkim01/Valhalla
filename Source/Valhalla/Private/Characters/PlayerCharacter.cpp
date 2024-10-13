@@ -166,6 +166,16 @@ void APlayerCharacter::Equip(const FInputActionValue& Value)
 	}
 }
 
+void APlayerCharacter::LightAttack()
+{
+	Debug::Print(TEXT("약공격"));
+}
+
+void APlayerCharacter::HeavyAttack()
+{
+	Debug::Print(TEXT("강공격"));
+}
+
 void APlayerCharacter::InitEquipMontageNotify()
 {
 	// EquipMontage이 유효한지 검사.
@@ -246,6 +256,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		EnhancedInputComponent->BindAction(InteractionInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interaction);
 		EnhancedInputComponent->BindAction(EquipInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Equip);
+		EnhancedInputComponent->BindAction(LightAttackInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::LightAttack);
+		EnhancedInputComponent->BindAction(HeavyAttackInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::HeavyAttack);
 	}
 
 	// 축 입력 방식으로 캐릭터를 전방으로 이동시키는 코드를 주석 처리

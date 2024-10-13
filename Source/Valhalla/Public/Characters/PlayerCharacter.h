@@ -34,25 +34,15 @@ protected: // Protected methodes
 	virtual void BeginPlay() override;
 	void MoveForward(float Value);
 	/**
-	* 플레이어가 이동할 때 호출되는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
+	* 플레이어가 입력 액션 메소드.
 	* @param Value: 이동 방향 및 크기를 나타내는 입력 값.
 	*/
 	void Move(const FInputActionValue& Value);
-	/**
-	* 마우스가 움직일 때 호출되는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
-	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
-	*/
 	void Look(const FInputActionValue& Value);
-	/**
-	* 상호작용 하는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
-	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
-	*/
 	void Interaction(const FInputActionValue& Value);
-	/**
-	* 무기를 장착하는 메소드로, FInputActionValue 타입의 입력 값을 받아 처리.
-	* @param Value: 마우스의 이동 방향 및 크기를 나타내는 입력 값.
-	*/
 	void Equip(const FInputActionValue& Value);
+	void LightAttack();
+	void HeavyAttack();
 
 private: // Private methodes
 	/**
@@ -103,17 +93,29 @@ protected: // Protected variables
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* LookInputAction = nullptr;
 	/**
-	* 플레이어가 상호작용하는 액션.
+	* 플레이어가 상호작용하는 입력 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* InteractionInputAction = nullptr;
 	/**
-	* 플레이어가 무기를 장착하는 액션.
+	* 플레이어가 무기를 장착하는 입력 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* EquipInputAction = nullptr;
+	/**
+	* 플레이어 약공격 입력 액션.
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
+	UInputAction* LightAttackInputAction = nullptr;
+	/**
+	* 플레이어 강공격 입력 액션
+	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
+	UInputAction* HeavyAttackInputAction = nullptr;
 	/**
 	* 플레이어의 무기 장착 애니메이션 몽타주.
 	* 디폴트 값만 편집 가능(EditDefaultsOnly) 속성으로 설정.
