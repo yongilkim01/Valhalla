@@ -57,6 +57,11 @@ private: // Private methodes
 	void AttachWeaponToRightHand();
 	void AttachWeaponToBack();
 
+	/**
+	* 애니메이션 몽타주 실행 메소드.
+	*/
+	void PlayLightAttackMontage();
+
 private: // Private variables	
 	/**
 	* 플레이어 캐릭터에 연결된 스프링 암 컴포넌트. 카메라와 캐릭터 간의 거리를 제어하는 역할.
@@ -74,58 +79,49 @@ private: // Private variables
 	UCameraComponent* Camera = nullptr;
 
 protected: // Protected variables
+
 	/**
 	* 입력 맵핑을 관리하는 UInputMappingContext 객체. 입력 액션과 컨텍스트를 바인딩하여 플레이어가 입력을 통해 캐릭터를 제어.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputMappingContext* MappingContext = nullptr;
+
 	/**
-	* 플레이어 캐릭터의 이동을 처리하는 입력 액션.
+	* 플레이어 입력 액션.
 	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* MoveInputAction = nullptr;
-	/**
-	* 플레이어 카메라의 회전을 마우스의 이동을 따라서 처리하는 입력 액션.
-	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
-	*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* LookInputAction = nullptr;
-	/**
-	* 플레이어가 상호작용하는 입력 액션.
-	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
-	*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* InteractionInputAction = nullptr;
-	/**
-	* 플레이어가 무기를 장착하는 입력 액션.
-	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
-	*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* EquipInputAction = nullptr;
-	/**
-	* 플레이어 약공격 입력 액션.
-	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
-	*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* LightAttackInputAction = nullptr;
-	/**
-	* 플레이어 강공격 입력 액션
-	* Blueprint에서 편집 가능(EditAnywhere)하며, Blueprint에서 읽기 전용(BlueprintReadOnly) 속성으로 설정.
-	*/
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterData|Input")
 	UInputAction* HeavyAttackInputAction = nullptr;
+
 	/**
-	* 플레이어의 무기 장착 애니메이션 몽타주.
+	* 플레이어의 애니메이션 몽타주.
 	* 디폴트 값만 편집 가능(EditDefaultsOnly) 속성으로 설정.
 	*/
 	UPROPERTY(EditDefaultsOnly, Category = "CharacterData|Animation")
 	UAnimMontage* EquipMontage = nullptr;
-	/**
-	* 플레이어의 무기 장착 해제 애니메이션 몽타주.
-	* 디폴트 값만 편집 가능(EditDefaultsOnly) 속성으로 설정.
-	*/
+
 	UPROPERTY(EditDefaultsOnly, Category = "CharacterData|Animation")
 	UAnimMontage* UnequipMontage = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "CharacterData|Animation")
+	UAnimMontage* LightAttackMontage = nullptr;
+
+private: // Privated variables
+	int32 CurrentComboCount = 0;
 };

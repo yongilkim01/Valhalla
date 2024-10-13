@@ -21,7 +21,7 @@ public:
 	* 애니메이션 인스턴스가 생성되고 초기화 될 때 호출.
 	* 캐릭터 레퍼런스를 가져와서 할당.
 	*/
-	virtual void NativeInitializeAnimation() override;
+	virtual void NativeInitializeAnimation() override;	
 	/**
 	* 애니메이션 업데이트를 수행하는 매소드.
 	* 애니메이션 상태나 캐릭터 상태를 업데이트하는데 사용.
@@ -32,11 +32,11 @@ public:
 
 protected:
 	// 현재 이 애니메이션 인스턴스를 소유하고 있는 캐릭터 객체.
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	class ABaseCharacter* OwningCharacter = nullptr;
 	
 	// OwingCharacter의 CharacterMovementComponent 객체.
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	class UCharacterMovementComponent* OwningMovementComponent = nullptr;
 
 	// 애니메이션 상태를 변경시키기 위한 캐릭터 객체의 움직이는 속도.
@@ -49,6 +49,6 @@ protected:
 
 	// 애니메이션 상태를 변경시키기 위한 캐릭터의 현재 상태.
 	UPROPERTY(BlueprintReadOnly, Category = "AnimData|Character State")
-	ECharacterState CharacterState;
+	ECharacterEquipState CharacterEquipState;
 	
 };

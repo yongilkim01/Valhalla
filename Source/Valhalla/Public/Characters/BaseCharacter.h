@@ -30,8 +30,11 @@ public: // 게터 세터
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 	FORCEINLINE AItem* GetOverlappingItem() { return OverlappingItem; }
 
-	FORCEINLINE void SetCharacterState(ECharacterState State) { CharacterState = State; }
-	FORCEINLINE ECharacterState GetCharacterState() { return CharacterState; }
+	FORCEINLINE void SetCharacterEquipState(ECharacterEquipState State) { CharacterEquipState = State; }
+	FORCEINLINE ECharacterEquipState GetCharacterEquipState() { return CharacterEquipState; }
+
+	FORCEINLINE void SetCharacterActionState(ECharacterActionState State) { CharacterActionState = State; }
+	FORCEINLINE ECharacterActionState GetCharacterActionState() { return CharacterActionState; }
 
 private: // Private 멤버 변수
 	/**
@@ -45,6 +48,10 @@ private: // Private 멤버 변수
 	UPROPERTY(VisibleAnywhere, Category = "CharacterData|Item")
 	AItem* CharacterWeapon = nullptr;
 
-	/** 현재 플레이어 캐릭터의 상태를 담고 있는 변수. */
-	ECharacterState CharacterState = ECharacterState::ECS_Unequip;
+	/** 현재 플레이어 캐릭터의 장착 상태를 나타내는 멤버 변수. */
+	ECharacterEquipState CharacterEquipState = ECharacterEquipState::ECS_Unequip;
+
+	/** 현재 플레이어의 액션 상태를 나타내는 멤버 변수. */
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	ECharacterActionState CharacterActionState = ECharacterActionState::EAS_Unoccupied;
 };

@@ -31,5 +31,5 @@ void UCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 	IsAcceleration = OwningMovementComponent->GetCurrentAcceleration().SizeSquared2D() > 0.f;
 
 	// 현재 캐릭터 애니메이션의 캐릭터 상태 업데이트
-	CharacterState = OwningCharacter->GetCharacterState();
+	CharacterEquipState = OwningCharacter->GetCharacterEquipState();
 }

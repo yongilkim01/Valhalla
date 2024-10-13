@@ -155,11 +155,11 @@ void APlayerCharacter::Equip(const FInputActionValue& Value)
 
 	if (AnimInstance)
 	{
-		if (GetCharacterState() == ECharacterState::ECS_Unequip)
+		if (GetCharacterEquipState() == ECharacterEquipState::ECS_Unequip)
 		{
 			AnimInstance->Montage_Play(EquipMontage);
 		}
-		else if (GetCharacterState() == ECharacterState::ECS_Equip)
+		else if (GetCharacterEquipState() == ECharacterEquipState::ECS_Equip)
 		{
 			AnimInstance->Montage_Play(UnequipMontage);
 		}
@@ -168,7 +168,12 @@ void APlayerCharacter::Equip(const FInputActionValue& Value)
 
 void APlayerCharacter::LightAttack()
 {
-	Debug::Print(TEXT("약공격"));
+	if (GetCharacterActionState() == ECharacterActionState::EAS_Unoccupied
+		&& GetCharacterEquipState() != ECharacterEquipState::ECS_Unequip)
+	{
+		PlayLightAttackMontage();
+		SetCharacterActionState(ECharacterActionState::EAS_Attacking);
+	}
 }
 
 void APlayerCharacter::HeavyAttack()
@@ -227,7 +232,7 @@ void APlayerCharacter::AttachWeaponToRightHand()
 	if (GetOverlappingItem())
 	{
 		// 캐릭터의 상태를 장착 상태로 변경
-		SetCharacterState(ECharacterState::ECS_Equip);
+		SetCharacterEquipState(ECharacterEquipState::ECS_Equip);
 		GetOverlappingItem()->AttachItem(GetMesh(), FName("RightHandWeaponSocket"));
 		//GetMesh()->LinkAnimClassLayers(GetOverlappingItem());
 	}
@@ -238,8 +243,42 @@ void APlayerCharacter::AttachWeaponToBack()
 	Debug::Print(TEXT("등에 무기 부착"));
 	if (GetOverlappingItem())
 	{
-		SetCharacterState(ECharacterState::ECS_Unequip);
+		SetCharacterEquipState(ECharacterEquipState::ECS_Unequip);
 		GetOverlappingItem()->AttachItem(GetMesh(), FName("BackWeaponSocket"));
+	}
+}
+
+void APlayerCharacter::PlayLightAttackMontage()
+{
+	Debug::Print(TEXT("약공격"));
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && LightAttackMontage)
+	{
+		AnimInstance->Montage_Play(LightAttackMontage);
+		FName LightAttackSectionName = FName();
+
+		switch (CurrentComboCount)
+		{
+		case 0:
+			LightAttackSectionName = FName("LightAttack1");
+			CurrentComboCount++;
+			break;
+		case 1:
+			LightAttackSectionName = FName("LightAttack2");
+			CurrentComboCount++;
+			break;
+		case 2:
+			LightAttackSectionName = FName("LightAttack3");
+			CurrentComboCount++;
+			break;
+		case 3:
+			LightAttackSectionName = FName("LightAttack4");
+			CurrentComboCount = 0;
+			break;
+		default:
+			break;
+		}
+		AnimInstance->Montage_JumpToSection(LightAttackSectionName, LightAttackMontage);
 	}
 }
 
